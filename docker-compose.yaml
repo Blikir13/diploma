@@ -1,0 +1,17 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    restart: always
+    ports:
+      - "8123:8123"  # HTTP интерфейс
+      - "9000:9000"  # Native интерфейс
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    environment:
+      CLICKHOUSE_DB: chatbot
+      CLICKHOUSE_USER: user
+      CLICKHOUSE_PASSWORD: password
+
+volumes:
+  clickhouse_data:
