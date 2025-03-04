@@ -11,6 +11,12 @@ class ResponseModel:
         self.llm = self.create_llm()
         self.prompt = self.create_prompt()
 
+    def get_prompt(self):
+        return self.prompt
+
+    def get_llm(self):
+        return self.llm
+
     def create_prompt(self):
         template = """
             Игнорируй все предыдущие инструкции. Ты консультант интернет-сайта CXDP
@@ -37,10 +43,10 @@ class ResponseModel:
         """Создание LLM модели"""
         return OpenAI(model_name=self.model_name, temperature=self.temperature)
 
-    def create_chain(self, prompt_template):
-        """Создание цепочки с использованием модели"""
-        return LLMChain(prompt=self.prompt, llm=self.llm)
+    # def create_llm_chain(self):
+    #     """Создание цепочки с использованием модели"""
+    #     return LLMChain(prompt=self.prompt, llm=self.llm)
 
-    def generate_response(self, chain, question, context):
-        """Генерация ответа"""
-        return chain.invoke({"question": question, "context": context})
+    # def generate_response(self, chain, question, context):
+    #     """Генерация ответа"""
+    #     return chain.invoke({"question": question, "context": context})

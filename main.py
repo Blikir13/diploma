@@ -1,14 +1,18 @@
-from chat_bot.database.db_connector import ClickHouseConnector
-from chat_bot.models.chain import ResponseChain
-from chat_bot.models.model import ResponseModel
-from chat_bot.models.retriever import ContextRetriever
+from database.db_connector import ClickHouseConnector
+from models.chain import ResponseChain
+from models.model import ResponseModel
+from models.retriever import ContextRetriever
 from services.kafka_consumer import KafkaRequestConsumer
 from services.request_handler import RequestHandler
 from services.kafka_producer import KafkaResponseProducer
+from utils.logger import LoggerService
 
 
 def main():
     # Настройка Kafka Consumer для получения запросов
+    logger = LoggerService().get_logger()
+    logger.info("Start")
+
     producer = KafkaResponseProducer()
 
     clickhouse_connector = ClickHouseConnector()

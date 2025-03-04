@@ -1,6 +1,6 @@
 from kafka import KafkaProducer
 import json
-from chat_bot.config.settings import config
+from config.settings import config
 
 class KafkaResponseProducer:
     def __init__(self):

@@ -1,17 +1,24 @@
 from langchain_core.runnables import RunnablePassthrough
 from langchain.schema import StrOutputParser
+from langchain.chains import LLMChain
+
+from models.model import ResponseModel
+
 
 class ResponseChain:
-    def __init__(self, retriever, model, logger):
+    def __init__(self, retriever, model:ResponseModel, logger):
         self.retriever = retriever
         self.model = model
         self.logger = logger  # logger - это объект ClickHouseConnector
         self.chain = self.create_chain()
 
+    def create_llm_chain(self):
+        """Создание цепочки с использованием модели"""
+        return LLMChain(prompt=self.model.get_prompt(), llm=self.model.get_llm())
+
     def create_chain(self):
         """Создание цепочки обработки"""
-        prompt_template = "Ответь на вопрос с учётом контекста: {context}. Вопрос: {question}"
-        model_chain = self.model.create_chain(prompt_template)
+        model_chain = self.create_llm_chain()
 
         return (
             {"context": self.retriever.get_retriever() | RunnablePassthrough(), "question": RunnablePassthrough()}
@@ -23,7 +30,7 @@ class ResponseChain:
         """Генерация ответа с использованием цепочки и логирование в ClickHouse"""
         context_documents = self.retriever.get_retriever().get_relevant_documents(question)
         context = " ".join([doc.page_content for doc in context_documents])
-        response = self.model.generate_response(self.chain, question, context)
+        response = self.chain.invoke({"question": question, "context": context})
 
         # Логирование в ClickHouse
         self.logger.save_context(question, context, response)

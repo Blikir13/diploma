@@ -1,6 +1,6 @@
 from kafka import KafkaConsumer
 import json
-from chat_bot.config.settings import config
+from config.settings import config
 
 class KafkaRequestConsumer:
     def __init__(self, request_handler):

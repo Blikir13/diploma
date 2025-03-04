@@ -1,7 +1,7 @@
 import uuid
 
 from clickhouse_driver import Client
-from chat_bot.config.settings import config
+from config.settings import config
 
 class ClickHouseConnector:
     """Класс для подключения к ClickHouse и выполнения запросов."""
